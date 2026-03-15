@@ -1,0 +1,634 @@
+{
+  "_meta": {
+    "description": "ContractSense API Mock Data — Data contract for all API shapes, schemas, and variable names. Update this file whenever a new schema or endpoint is added.",
+    "version": "1.0.1",
+    "lastUpdated": "2026-03-15",
+    "sessionLog": [
+      {
+        "session": 1,
+        "date": "2026-03-15",
+        "summary": "Initial scaffold — defined all schemas (User, Lawyer, Contract, Clause, Analysis, PartyIntelligence, ReviewRequest, TrustSeal, ChatMessage), all endpoints (auth, contracts, marketplace, payments, seals, admin, aiBackend), and full mock data."
+      },
+      {
+        "session": 2,
+        "date": "2026-03-15",
+        "summary": "No schema or endpoint changes. Session focused on running the frontend locally, fixing CSS bugs (@apply dark), and removing non-existent npm package (@radix-ui/react-badge). Data contract is accurate as of v1.0.0."
+      }
+    ]
+  },
+
+  "envelopes": {
+    "success": {
+      "success": true,
+      "data": "...",
+      "error": null,
+      "meta": {
+        "timestamp": "2026-03-15T04:55:39.000Z",
+        "requestId": "req_abc123"
+      }
+    },
+    "error": {
+      "success": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Human-readable error message",
+        "details": [
+          { "field": "email", "message": "Invalid email address" }
+        ]
+      },
+      "meta": {
+        "timestamp": "2026-03-15T04:55:39.000Z",
+        "requestId": "req_abc123"
+      }
+    }
+  },
+
+  "schemas": {
+    "User": {
+      "id": "usr_01HXYZ...",
+      "email": "alice@example.com",
+      "name": "Alice Johnson",
+      "role": "user",
+      "createdAt": "2026-03-15T04:55:39.000Z",
+      "updatedAt": "2026-03-15T04:55:39.000Z"
+    },
+    "Lawyer": {
+      "id": "lwy_01HXYZ...",
+      "userId": "usr_01HXYZ...",
+      "name": "James Carter",
+      "email": "james@lawfirm.com",
+      "role": "lawyer",
+      "barNumber": "BAR123456",
+      "jurisdiction": "California, USA",
+      "specialisations": ["employment", "nda", "ip"],
+      "bio": "10+ years in corporate law specialising in employment contracts and NDAs.",
+      "avatarUrl": "https://example.com/avatar.jpg",
+      "rating": 4.8,
+      "reviewCount": 47,
+      "pricePerReview": 199.00,
+      "currency": "USD",
+      "isVerified": true,
+      "isAvailable": true,
+      "createdAt": "2026-03-15T04:55:39.000Z"
+    },
+    "Contract": {
+      "id": "ctr_01HXYZ...",
+      "userId": "usr_01HXYZ...",
+      "fileName": "employment_contract_acme.pdf",
+      "fileKey": "uploads/usr_01HXYZ.../ctr_01HXYZ....pdf",
+      "fileSize": 204800,
+      "mimeType": "application/pdf",
+      "status": "analysed",
+      "contractType": "employment",
+      "counterpartyName": "Acme Corp",
+      "createdAt": "2026-03-15T04:55:39.000Z",
+      "updatedAt": "2026-03-15T04:55:39.000Z"
+    },
+    "ContractStatus": {
+      "_enum": ["pending", "processing", "analysed", "error", "sealed"]
+    },
+    "ContractType": {
+      "_enum": ["employment", "freelance", "nda", "lease", "property", "service", "partnership", "loan", "other"]
+    },
+    "Clause": {
+      "id": "cls_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "index": 0,
+      "originalText": "The Employee agrees to a non-compete period of 24 months following termination...",
+      "plainEnglish": "You cannot work for a competitor for 2 years after leaving.",
+      "riskLevel": "red",
+      "riskExplanation": "A 24-month non-compete is unusually long and may be unenforceable in many jurisdictions. It severely limits your employment options.",
+      "counterClause": "The Employee agrees to a non-compete period of 3 months following termination, limited to direct competitors within the same geographic region.",
+      "readyToSendText": "I would like to propose revising Clause 7 (Non-Compete). The current 24-month restriction is excessive. I propose: [counter clause text]. Please advise if this is acceptable.",
+      "futurePredictions": [
+        {
+          "scenario": "You join a competitor after 6 months",
+          "risk": "Legal action for injunction and damages",
+          "advice": "Negotiate this clause down to 3-6 months before signing."
+        }
+      ]
+    },
+    "RiskLevel": {
+      "_enum": ["red", "yellow", "green"]
+    },
+    "Analysis": {
+      "id": "ana_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "contractType": "employment",
+      "overallRiskScore": 72,
+      "summary": "This employment contract contains several high-risk clauses, particularly around non-compete, IP assignment, and termination without cause.",
+      "clauses": ["[...array of Clause objects]"],
+      "redFlagCount": 3,
+      "yellowFlagCount": 5,
+      "greenFlagCount": 8,
+      "createdAt": "2026-03-15T04:55:39.000Z"
+    },
+    "PartyIntelligence": {
+      "id": "prt_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "counterpartyName": "Acme Corp",
+      "trustScore": 65,
+      "reputationSummary": "Acme Corp is a mid-sized technology company with an overall neutral reputation. They have faced one minor lawsuit in 2023 related to employment practices.",
+      "redFlags": [
+        "Named in a 2023 employment lawsuit (settled out of court)",
+        "1.8-star Glassdoor rating with multiple mentions of poor management"
+      ],
+      "sources": [
+        { "url": "https://example.com/acme-lawsuit", "title": "Acme Corp Lawsuit 2023", "snippet": "..." }
+      ],
+      "scrapedAt": "2026-03-15T04:55:39.000Z"
+    },
+    "ReviewRequest": {
+      "id": "rvq_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "userId": "usr_01HXYZ...",
+      "lawyerId": "lwy_01HXYZ...",
+      "status": "pending",
+      "paymentIntentId": "pi_stripe_...",
+      "paymentStatus": "paid",
+      "amountPaid": 199.00,
+      "currency": "USD",
+      "userNote": "Please pay particular attention to the non-compete clause.",
+      "createdAt": "2026-03-15T04:55:39.000Z",
+      "updatedAt": "2026-03-15T04:55:39.000Z"
+    },
+    "ReviewRequestStatus": {
+      "_enum": ["pending", "in_review", "completed", "rejected"]
+    },
+    "LawyerReview": {
+      "id": "lwr_01HXYZ...",
+      "reviewRequestId": "rvq_01HXYZ...",
+      "lawyerId": "lwy_01HXYZ...",
+      "annotations": [
+        {
+          "clauseId": "cls_01HXYZ...",
+          "note": "I concur with the AI analysis. This clause is unenforceable in California under B&P Code §16600.",
+          "recommendation": "Refuse to sign without reducing non-compete to 3 months."
+        }
+      ],
+      "overallVerdict": "Do not sign without amendments to Clauses 7, 9, and 14.",
+      "signedOff": true,
+      "signedOffAt": "2026-03-15T04:55:39.000Z"
+    },
+    "TrustSeal": {
+      "id": "tsl_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "lawyerId": "lwy_01HXYZ...",
+      "reviewRequestId": "rvq_01HXYZ...",
+      "sealHash": "sha256:a3b4c5d6e7f8...",
+      "reportHash": "sha256:1a2b3c4d5e6f...",
+      "sealedPdfKey": "sealed/ctr_01HXYZ.../sealed_report.pdf",
+      "issuedAt": "2026-03-15T04:55:39.000Z",
+      "verificationUrl": "https://contractsense.app/verify/sha256:a3b4c5d6e7f8..."
+    },
+    "ChatMessage": {
+      "id": "msg_01HXYZ...",
+      "contractId": "ctr_01HXYZ...",
+      "userId": "usr_01HXYZ...",
+      "role": "user",
+      "content": "What happens if I violate the non-compete clause?",
+      "createdAt": "2026-03-15T04:55:39.000Z"
+    }
+  },
+
+  "endpoints": {
+    "auth": {
+      "register": {
+        "method": "POST",
+        "path": "/api/core/auth/register",
+        "auth": false,
+        "body": {
+          "email": "alice@example.com",
+          "password": "SecurePass123!",
+          "name": "Alice Johnson",
+          "role": "user"
+        },
+        "response": {
+          "user": "[User schema]",
+          "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+          "refreshToken": "eyJhbGciOiJIUzI1NiJ9..."
+        }
+      },
+      "login": {
+        "method": "POST",
+        "path": "/api/core/auth/login",
+        "auth": false,
+        "body": {
+          "email": "alice@example.com",
+          "password": "SecurePass123!"
+        },
+        "response": {
+          "user": "[User schema]",
+          "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+          "refreshToken": "eyJhbGciOiJIUzI1NiJ9..."
+        }
+      },
+      "refresh": {
+        "method": "POST",
+        "path": "/api/core/auth/refresh",
+        "auth": false,
+        "body": { "refreshToken": "eyJhbGciOiJIUzI1NiJ9..." },
+        "response": {
+          "accessToken": "eyJhbGciOiJIUzI1NiJ9..."
+        }
+      },
+      "me": {
+        "method": "GET",
+        "path": "/api/core/auth/me",
+        "auth": true,
+        "roles": ["user", "lawyer", "admin"],
+        "response": "[User schema]"
+      }
+    },
+    "contracts": {
+      "upload": {
+        "method": "POST",
+        "path": "/api/core/contracts/upload",
+        "auth": true,
+        "roles": ["user"],
+        "contentType": "multipart/form-data",
+        "body": {
+          "file": "[PDF or DOCX file, max 20MB]",
+          "counterpartyName": "Acme Corp"
+        },
+        "response": "[Contract schema]"
+      },
+      "list": {
+        "method": "GET",
+        "path": "/api/core/contracts",
+        "auth": true,
+        "roles": ["user"],
+        "query": { "page": 1, "limit": 10, "status": "analysed" },
+        "response": {
+          "contracts": ["[Contract schema]"],
+          "total": 5,
+          "page": 1,
+          "limit": 10
+        }
+      },
+      "get": {
+        "method": "GET",
+        "path": "/api/core/contracts/:id",
+        "auth": true,
+        "roles": ["user"],
+        "response": "[Contract schema]"
+      },
+      "report": {
+        "method": "GET",
+        "path": "/api/core/contracts/:id/report",
+        "auth": true,
+        "roles": ["user"],
+        "response": "[Analysis schema with nested Clause array]"
+      },
+      "callback": {
+        "method": "POST",
+        "path": "/api/core/contracts/:id/callback",
+        "auth": "internal",
+        "note": "Called by AI backend when analysis is complete",
+        "body": {
+          "status": "analysed",
+          "contractType": "employment",
+          "analysisId": "ana_01HXYZ..."
+        }
+      }
+    },
+    "marketplace": {
+      "listLawyers": {
+        "method": "GET",
+        "path": "/api/core/marketplace/lawyers",
+        "auth": true,
+        "roles": ["user"],
+        "query": {
+          "specialisation": "employment",
+          "minRating": 4.0,
+          "maxPrice": 500,
+          "page": 1,
+          "limit": 12
+        },
+        "response": {
+          "lawyers": ["[Lawyer schema]"],
+          "total": 24,
+          "page": 1,
+          "limit": 12
+        }
+      },
+      "getLawyer": {
+        "method": "GET",
+        "path": "/api/core/marketplace/lawyers/:id",
+        "auth": true,
+        "roles": ["user"],
+        "response": "[Lawyer schema]"
+      },
+      "createReviewRequest": {
+        "method": "POST",
+        "path": "/api/core/marketplace/review-requests",
+        "auth": true,
+        "roles": ["user"],
+        "body": {
+          "contractId": "ctr_01HXYZ...",
+          "lawyerId": "lwy_01HXYZ...",
+          "userNote": "Please pay particular attention to clause 7."
+        },
+        "response": "[ReviewRequest schema]"
+      },
+      "getLawyerRequests": {
+        "method": "GET",
+        "path": "/api/core/marketplace/review-requests/incoming",
+        "auth": true,
+        "roles": ["lawyer"],
+        "response": {
+          "requests": ["[ReviewRequest schema with Contract and User nested]"],
+          "total": 3
+        }
+      }
+    },
+    "payments": {
+      "createIntent": {
+        "method": "POST",
+        "path": "/api/core/payments/create-intent",
+        "auth": true,
+        "roles": ["user"],
+        "body": {
+          "reviewRequestId": "rvq_01HXYZ...",
+          "amount": 19900,
+          "currency": "usd"
+        },
+        "response": {
+          "clientSecret": "pi_stripe_..._secret_...",
+          "paymentIntentId": "pi_stripe_..."
+        }
+      },
+      "webhook": {
+        "method": "POST",
+        "path": "/api/core/payments/webhook",
+        "auth": false,
+        "note": "Stripe webhook — validates Stripe-Signature header",
+        "body": "[Stripe event object]"
+      }
+    },
+    "seals": {
+      "verify": {
+        "method": "GET",
+        "path": "/api/core/seals/:hash/verify",
+        "auth": false,
+        "response": {
+          "valid": true,
+          "seal": "[TrustSeal schema]",
+          "lawyer": "[Lawyer schema (name, barNumber, jurisdiction only)]",
+          "contract": { "id": "...", "fileName": "...", "contractType": "..." }
+        }
+      }
+    },
+    "admin": {
+      "listPendingLawyers": {
+        "method": "GET",
+        "path": "/api/core/admin/lawyers/pending",
+        "auth": true,
+        "roles": ["admin"],
+        "response": { "lawyers": ["[Lawyer schema with isVerified: false]"] }
+      },
+      "verifyLawyer": {
+        "method": "PATCH",
+        "path": "/api/core/admin/lawyers/:id/verify",
+        "auth": true,
+        "roles": ["admin"],
+        "body": { "isVerified": true },
+        "response": "[Lawyer schema]"
+      }
+    },
+    "aiBackend": {
+      "analyse": {
+        "method": "POST",
+        "path": "/api/ai/analyse",
+        "note": "Called internally by Celery — not directly from frontend",
+        "body": {
+          "contractId": "ctr_01HXYZ...",
+          "fileKey": "uploads/usr_01.../ctr_01.pdf",
+          "counterpartyName": "Acme Corp"
+        },
+        "response": { "taskId": "celery-task-uuid" }
+      },
+      "partyIntelligence": {
+        "method": "POST",
+        "path": "/api/ai/party-intelligence",
+        "auth": true,
+        "body": {
+          "contractId": "ctr_01HXYZ...",
+          "counterpartyName": "Acme Corp"
+        },
+        "response": "[PartyIntelligence schema]"
+      },
+      "chat": {
+        "method": "POST",
+        "path": "/api/ai/chat",
+        "auth": true,
+        "body": {
+          "contractId": "ctr_01HXYZ...",
+          "message": "What happens if I violate the non-compete?",
+          "history": ["[ChatMessage schema]"]
+        },
+        "response": {
+          "reply": "If you violate the non-compete clause...",
+          "sources": ["cls_01HXYZ..."]
+        }
+      },
+      "health": {
+        "method": "GET",
+        "path": "/api/ai/health",
+        "auth": false,
+        "response": { "status": "ok", "version": "1.0.0" }
+      }
+    }
+  },
+
+  "mockData": {
+    "users": [
+      {
+        "id": "usr_01HXYZ001",
+        "email": "alice@example.com",
+        "name": "Alice Johnson",
+        "role": "user",
+        "createdAt": "2026-01-10T09:00:00.000Z"
+      },
+      {
+        "id": "usr_01HXYZ002",
+        "email": "bob@lawfirm.com",
+        "name": "Bob Martinez",
+        "role": "lawyer",
+        "createdAt": "2026-01-05T08:00:00.000Z"
+      },
+      {
+        "id": "usr_01HXYZ003",
+        "email": "admin@contractsense.app",
+        "name": "CS Admin",
+        "role": "admin",
+        "createdAt": "2025-12-01T00:00:00.000Z"
+      }
+    ],
+    "lawyers": [
+      {
+        "id": "lwy_01HXYZ001",
+        "userId": "usr_01HXYZ002",
+        "name": "Bob Martinez",
+        "email": "bob@lawfirm.com",
+        "barNumber": "BAR987654",
+        "jurisdiction": "New York, USA",
+        "specialisations": ["employment", "nda", "service"],
+        "bio": "15 years in employment and corporate law. Former BigLaw associate.",
+        "avatarUrl": null,
+        "rating": 4.9,
+        "reviewCount": 83,
+        "pricePerReview": 249.00,
+        "currency": "USD",
+        "isVerified": true,
+        "isAvailable": true
+      },
+      {
+        "id": "lwy_01HXYZ002",
+        "userId": "usr_01HXYZ010",
+        "name": "Sarah Chen",
+        "email": "sarah@chenlaw.com",
+        "barNumber": "BAR112233",
+        "jurisdiction": "California, USA",
+        "specialisations": ["ip", "freelance", "partnership"],
+        "bio": "IP and tech contracts specialist. Stanford Law grad.",
+        "avatarUrl": null,
+        "rating": 4.7,
+        "reviewCount": 56,
+        "pricePerReview": 199.00,
+        "currency": "USD",
+        "isVerified": true,
+        "isAvailable": true
+      }
+    ],
+    "contracts": [
+      {
+        "id": "ctr_01HXYZ001",
+        "userId": "usr_01HXYZ001",
+        "fileName": "employment_contract_acme.pdf",
+        "fileKey": "uploads/usr_01HXYZ001/ctr_01HXYZ001.pdf",
+        "fileSize": 204800,
+        "mimeType": "application/pdf",
+        "status": "analysed",
+        "contractType": "employment",
+        "counterpartyName": "Acme Corp",
+        "createdAt": "2026-03-10T10:00:00.000Z"
+      }
+    ],
+    "analyses": [
+      {
+        "id": "ana_01HXYZ001",
+        "contractId": "ctr_01HXYZ001",
+        "contractType": "employment",
+        "overallRiskScore": 72,
+        "summary": "This employment contract presents significant risk in areas of non-compete, IP assignment, and at-will termination. Recommend legal review before signing.",
+        "redFlagCount": 3,
+        "yellowFlagCount": 5,
+        "greenFlagCount": 8,
+        "clauses": [
+          {
+            "id": "cls_01HXYZ001",
+            "index": 0,
+            "originalText": "The Employee agrees to a non-compete restriction period of 24 months following termination of employment.",
+            "plainEnglish": "You cannot work for a competitor for 2 years after you leave.",
+            "riskLevel": "red",
+            "riskExplanation": "24 months is unusually long. Courts in many states (e.g., California) would void this entirely. Even in states where enforceable, it significantly limits your career options.",
+            "counterClause": "The Employee agrees to a non-compete restriction period of 3 months following termination, limited to direct product competitors operating within the Employee's metro area.",
+            "readyToSendText": "I propose revising Clause 3 (Non-Compete). The 24-month restriction is disproportionate. I propose a 3-month restriction limited to direct competitors in my metro area. Please let me know if this amendment is acceptable.",
+            "futurePredictions": [
+              {
+                "scenario": "Employee joins competitor within 24 months",
+                "risk": "Injunction, damages, legal fees — potentially career-limiting",
+                "advice": "Do not sign this clause as written. Negotiate or seek legal counsel."
+              }
+            ]
+          },
+          {
+            "id": "cls_01HXYZ002",
+            "index": 1,
+            "originalText": "Any inventions, discoveries, or works created by the Employee during employment shall be the exclusive property of Acme Corp.",
+            "plainEnglish": "Everything you create while employed belongs to the company.",
+            "riskLevel": "red",
+            "riskExplanation": "The clause lacks carve-outs for personal projects created on personal time with personal resources. It may claim ownership of your side projects.",
+            "counterClause": "Any inventions, discoveries, or works created by the Employee directly related to the Company's business, using Company resources, and during Company time, shall be the exclusive property of Acme Corp. The Company acknowledges that inventions created on personal time, using personal resources, and unrelated to the Company's business are excluded.",
+            "readyToSendText": "Regarding Clause 5 (IP Assignment), I request a carve-out for personal projects developed on personal time with personal resources unrelated to Acme Corp's business. I propose the following revised wording: [counter clause]. Please confirm acceptance.",
+            "futurePredictions": [
+              {
+                "scenario": "Employee builds a side project and launches it",
+                "risk": "Company may claim ownership of the side project",
+                "advice": "Add an explicit carve-out for pre-existing and personally-developed projects."
+              }
+            ]
+          },
+          {
+            "id": "cls_01HXYZ003",
+            "index": 2,
+            "originalText": "The Company may terminate employment at any time, with or without cause, with two weeks' notice.",
+            "plainEnglish": "You can be fired at any time for any reason with only 2 weeks notice.",
+            "riskLevel": "yellow",
+            "riskExplanation": "At-will termination with only 2 weeks notice is standard in the US but provides limited job security.",
+            "counterClause": "The Company may terminate employment with 30 days written notice, or payment in lieu of notice.",
+            "readyToSendText": "I propose extending the notice period in Clause 8 from 2 weeks to 30 days to provide greater security for both parties. Proposed wording: [counter clause].",
+            "futurePredictions": [
+              {
+                "scenario": "Employee is let go unexpectedly",
+                "risk": "Only 2 weeks of financial runway — limited time to find new employment",
+                "advice": "Negotiate an extended notice period or severance clause."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "partyIntelligence": [
+      {
+        "id": "prt_01HXYZ001",
+        "contractId": "ctr_01HXYZ001",
+        "counterpartyName": "Acme Corp",
+        "trustScore": 65,
+        "reputationSummary": "Acme Corp is a mid-sized B2B SaaS company founded in 2015. While financially stable, they have faced one employment lawsuit (settled 2023) and have below-average employee satisfaction scores on Glassdoor.",
+        "redFlags": [
+          "Named defendant in 2023 employment practices lawsuit (settled, terms undisclosed)",
+          "Glassdoor rating: 2.1/5 — multiple reviews cite poor management and high turnover",
+          "No BBB accreditation found"
+        ],
+        "sources": [
+          {
+            "url": "https://courtlistener.com/example/acme-v-doe-2023",
+            "title": "Acme Corp v. Employee — Employment Practices Lawsuit",
+            "snippet": "Filed March 2023, settled November 2023..."
+          }
+        ],
+        "scrapedAt": "2026-03-10T10:05:00.000Z"
+      }
+    ],
+    "reviewRequests": [
+      {
+        "id": "rvq_01HXYZ001",
+        "contractId": "ctr_01HXYZ001",
+        "userId": "usr_01HXYZ001",
+        "lawyerId": "lwy_01HXYZ001",
+        "status": "completed",
+        "paymentStatus": "paid",
+        "amountPaid": 249.00,
+        "currency": "USD",
+        "userNote": "Please focus on the non-compete and IP assignment clauses.",
+        "createdAt": "2026-03-12T11:00:00.000Z"
+      }
+    ],
+    "trustSeals": [
+      {
+        "id": "tsl_01HXYZ001",
+        "contractId": "ctr_01HXYZ001",
+        "lawyerId": "lwy_01HXYZ001",
+        "reviewRequestId": "rvq_01HXYZ001",
+        "sealHash": "sha256:a3b4c5d6e7f81234567890abcdef1234567890abcdef1234567890abcdef1234",
+        "reportHash": "sha256:1a2b3c4d5e6f1234567890abcdef1234567890abcdef1234567890abcdef5678",
+        "sealedPdfKey": "sealed/ctr_01HXYZ001/sealed_report.pdf",
+        "issuedAt": "2026-03-13T14:00:00.000Z",
+        "verificationUrl": "https://contractsense.app/verify/sha256:a3b4c5d6e7f81234567890abcdef1234567890abcdef1234567890abcdef1234"
+      }
+    ]
+  }
+}

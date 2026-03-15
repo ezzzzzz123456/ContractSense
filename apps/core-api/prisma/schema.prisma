@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  user
+  lawyer
+  admin
+}
+
+enum ContractStatus {
+  pending
+  processing
+  analysed
+  error
+  sealed
+}
+
+enum ContractType {
+  employment
+  freelance
+  nda
+  lease
+  property
+  service
+  partnership
+  loan
+  other
+}
+
+enum ReviewRequestStatus {
+  pending
+  in_review
+  completed
+  rejected
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String
+  name           String
+  role           UserRole  @default(user)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  contracts      Contract[]
+  refreshTokens  RefreshToken[]
+  reviewRequests ReviewRequest[] @relation("UserReviewRequests")
+  lawyer         Lawyer?
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Lawyer {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  barNumber        String   @unique
+  jurisdiction     String
+  specialisations  String[]
+  bio              String
+  avatarUrl        String?
+  rating           Float    @default(0)
+  reviewCount      Int      @default(0)
+  pricePerReview   Float
+  currency         String   @default("USD")
+  isVerified       Boolean  @default(false)
+  isAvailable      Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewRequests   ReviewRequest[]
+  lawyerReviews    LawyerReview[]
+  trustSeals       TrustSeal[]
+
+  @@map("lawyers")
+}
+
+model Contract {
+  id               String         @id @default(cuid())
+  userId           String
+  fileName         String
+  fileKey          String
+  fileSize         Int
+  mimeType         String
+  status           ContractStatus @default(pending)
+  contractType     ContractType?
+  counterpartyName String?
+  analysisId       String?        // MongoDB document ID
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewRequests   ReviewRequest[]
+  trustSeal        TrustSeal?
+
+  @@map("contracts")
+}
+
+model ReviewRequest {
+  id              String              @id @default(cuid())
+  contractId      String
+  userId          String
+  lawyerId        String
+  status          ReviewRequestStatus @default(pending)
+  paymentIntentId String?
+  paymentStatus   String              @default("unpaid")
+  amountPaid      Float               @default(0)
+  currency        String              @default("USD")
+  userNote        String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  // Relations
+  contract        Contract       @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  user            User           @relation("UserReviewRequests", fields: [userId], references: [id])
+  lawyer          Lawyer         @relation(fields: [lawyerId], references: [id])
+  lawyerReview    LawyerReview?
+  trustSeal       TrustSeal?
+
+  @@map("review_requests")
+}
+
+model LawyerReview {
+  id              String        @id @default(cuid())
+  reviewRequestId String        @unique
+  lawyerId        String
+  overallVerdict  String
+  signedOff       Boolean       @default(false)
+  signedOffAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  reviewRequest   ReviewRequest @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+  lawyer          Lawyer        @relation(fields: [lawyerId], references: [id])
+
+  @@map("lawyer_reviews")
+}
+
+model TrustSeal {
+  id              String        @id @default(cuid())
+  contractId      String        @unique
+  lawyerId        String
+  reviewRequestId String        @unique
+  sealHash        String        @unique
+  reportHash      String
+  sealedPdfKey    String
+  issuedAt        DateTime      @default(now())
+
+  // Relations
+  contract        Contract      @relation(fields: [contractId], references: [id])
+  lawyer          Lawyer        @relation(fields: [lawyerId], references: [id])
+  reviewRequest   ReviewRequest @relation(fields: [reviewRequestId], references: [id])
+
+  @@map("trust_seals")
+}
